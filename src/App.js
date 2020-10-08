@@ -23,13 +23,17 @@ function useInterval(callback, delay) {
 
 let START;
 let END;
-let COUNTS = null;
+let UPDATED = null;
+let CREATED = null;
 
 const Root = () => {
   const [LIST, setLIST] = useState([]);
   const [TIME, setTIME] = useState(0);
   const [MEMORY_1, setMEMORY_1] = useState(0);
   const [MEMORY_2, setMEMORY_2] = useState(0);
+
+  const [UPDATE_TIME, setUPDATE_TIME] = useState(0);
+  const [UPDATE, setUPDATE] = useState(0);
 
   const changeFn = (e) => {
     const colorClasses = ["primary", "secondary", "tertiary", "quaternary"];
@@ -43,32 +47,48 @@ const Root = () => {
     const height = containerEl.clientHeight / n;
     const width = containerEl.clientWidth / n;
     const counts = n * n;
-    COUNTS = counts;
+    CREATED = counts;
 
     for (let i = 0; i < counts; i++) {
       const color =
         colorClasses[Math.floor(Math.random() * colorClasses.length)];
-
       // const styleStr = `height: ${height}px; width: ${width}px;`;
       const styleObj = {
         height: `${height}px`,
         width: `${width}px`,
       };
       const classStr = `dot ${color}`;
-
-      returnArr.push(<div key={i} style={styleObj} className={classStr}></div>);
+      returnArr.push(
+        <div key={i} style={styleObj} className={classStr}>
+          {UPDATE}
+        </div>
+      );
     }
     setLIST(returnArr);
   };
 
   useInterval(() => {
     const c = document.getElementById("bowl").children;
-    if (COUNTS === c.length) {
+    if (CREATED === c.length) {
       END = performance.now();
       setTIME(((END - START) / 1000).toFixed(3));
-      COUNTS = null;
+      CREATED = null;
     }
   });
+
+  setInterval(() => {
+    const c = document.getElementById("bowl").children;
+    const target = c[c.length - 1];
+
+    if (target) {
+      const text = target.innerText;
+      if (UPDATED === +text) {
+        END = performance.now();
+        setUPDATE_TIME(((END - START) / 1000).toFixed(3));
+        UPDATED = null;
+      }
+    }
+  }, 1000);
 
   useInterval(() => {
     setMEMORY_1(
@@ -86,6 +106,12 @@ const Root = () => {
     );
   }, 100);
 
+  const clickFn = () => {
+    START = performance.now();
+    setUPDATE(UPDATE + 1);
+    UPDATED = UPDATE;
+  };
+
   return (
     <div>
       <div className="container"></div>
@@ -94,7 +120,9 @@ const Root = () => {
         <input type="text" onChange={changeFn} />
         <div className="memory">{MEMORY_1}</div>
         <div className="memory">{MEMORY_2}</div>
-        <div className="memory">Sec : {TIME}</div>
+        <div className="memory">Create Sec : {TIME}</div>
+        <div className="memory">Update Sec : {UPDATE_TIME}</div>
+        <button onClick={clickFn}>업데이트</button>
       </div>
       <div id="bowl">{LIST}</div>
     </div>
