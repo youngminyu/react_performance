@@ -1,6 +1,6 @@
 :root {
   --progress-height: 40px;
-  --progress-width: 300px;
+  --progress-width: 500px;
   --progress-border-size: 15px;
   --progress-outer-height: calc(
     var(--progress-height) + var(--progress-border-size) * 2
@@ -18,6 +18,13 @@ body,
   margin: 0;
   padding: 0;
 }
+#bowl {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+  z-index: 999;
+}
 
 button {
   background: #2196f3;
@@ -31,17 +38,23 @@ button {
 }
 
 .container {
+  overflow: hidden;
+  z-index: 500;
   top: 0;
   left: 0;
   position: fixed;
+  /* overflow: auto; */
+  /* float: left; */
   height: 100%;
   width: 100%;
   margin: 0;
   padding: 0;
+  /* position: relative; */
   overflow: hidden;
 }
 
 .dot {
+  /* font-size: 0; */
   height: 25px;
   width: 25px;
   background-color: gray;
@@ -58,6 +71,10 @@ button {
   background-color: #ff7c61;
 }
 
+.dot.blue {
+  background-color: blue;
+}
+
 .dot.secondary {
   background-color: #1affb0;
 }
@@ -72,8 +89,9 @@ button {
 
 .my-input {
   position: fixed;
-  height: 40px;
-  width: 300px;
+  width: 500px;
+  z-index: 99999;
+  padding-top: 70px;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -81,16 +99,21 @@ button {
 
 .my-input input {
   font-size: 30px;
-  height: 100%;
+  height: 40px;
   width: 100%;
   box-sizing: border-box;
+  top: 0;
+  left: 0;
+  position: absolute;
+  z-index: 999;
 }
 
 .progress {
-  position: fixed;
-  top: 50%;
+  z-index: 99;
+  position: absolute;
+  top: 0;
   left: 50%;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -15px);
   height: calc(var(--progress-outer-height));
   width: calc(var(--progress-outer-width));
   background: linear-gradient(to right, #2196f3 99.99%, transparent),
